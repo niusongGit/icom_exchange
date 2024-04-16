@@ -1,0 +1,87 @@
+{
+            "address": "0xc44785c10a2352d6c3905bb05727289319fb4920",
+            "topics": [
+                "0x02859d6ea79480b864a8b59222cfdd885d97e078e8849ca0c5f78348826b5e3e",
+                "0x0000000000000000000000005b27836a2c5c649724e35a56f6fb9528a8d15f60", //哪个发的
+                "0x0000000000000000000000002c35aed14cda9e9b3f5d9cb0661e0af5077871b7" //代币地址
+            ],
+            "data": "0x000000000000000000000000000000000000000000000000000000000000270f0000000000000000000000000000000000000000000000000000000000002710000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000000046173646600000000000000000000000000000000000000000000000000000000",
+
+            "blockNumber": "0x1a24a84",
+            "blockHash": "0x77e5830bd2ba2b690a15d2b6c5f7f6b6090c25b2a8120e0ca1849973a0efa4f7",
+            "timeStamp": "0x6603cb91",
+            "gasPrice": "0x5f5e101",
+            "gasUsed": "0x214b2",
+            "logIndex": "0x2",
+            "transactionHash": "0xaf1b77d0faa65b934efbf64baf83d1bbc12a4e20b36b4806e487e75ad7c946f0",
+            "transactionIndex": "0x1"
+        }
+
+
+        000000000000000000000000000000000000000000000000000000000000270f 转的金额
+        0000000000000000000000000000000000000000000000000000000000002710 比例，精度10000
+        0000000000000000000000000000000000000000000000000000000000000060
+        0000000000000000000000000000000000000000000000000000000000000004
+        6173646600000000000000000000000000000000000000000000000000000000 icom的帐户地址（往这个地址转）  srcaddr要做成调用时可修改配置
+
+
+        type Transaction struct {
+        	TransactionHash string `json:"transactionHash"`
+        	Sender          string `json:"sender"`
+        	Token           string `json:"token"`
+        	BlockNumber     uint64 `json:"blockNumber"`
+        	Amount          uint64 `json:"amount"`
+        	Rate            uint64 `json:"rate"`
+        	IAddress        string `json:"iAddress"`
+        	SrcIAddress     string `json:"srcIAddress"`
+        	Status          int64  `json:"status"` // 0未处理 1已处理 2 处理失败
+        }
+        有如上golang结构体，要将该结构体类型的大量数据存在leveldb中，如何设计保存才能更方便的实现以下功能：
+        1.通过TransactionHash查到记录(TransactionHash是唯一的)
+        2.通过筛选Status值满足条件的记录
+        3.方遍区间查询BlockNumber值满足条件的记录(BlockNumber会出现重复值)
+        请用golang实现
+
+
+        golang实现以下功能：
+        1.定时器每2s执行一次TransactionPushICom方法
+        2.从命令行输入指定命令pulllog时执行ArbiscanTransactions方法
+        3.从命令行输入指定命令pushicom时执行TransactionPushICom方法
+        4.从命令行输入指定命令findlog时执行TransactionByBlockNumberRangeFind(minBlockNumber, maxBlockNumber uint64)方法，minBlockNumber和maxBlockNumber参数均从命令行获取
+        5.设计优雅的退出程序
+
+        //sender 发送者
+        //token 代币地址，0地址为eth
+        //amount 代币输入数量
+        //rate 兑换比例
+        //toAmount 代币输出数量
+        //iAddress icom地址
+
+        //swap后桥接模式下（afterSend），token amount rate 都为0
+
+
+        0x
+        0000000000000000000000005b27836a2c5c649724e35a56f6fb9528a8d15f60 //sender 发送者
+        000000000000000000000000a8c2368a6f0a97d9a9639b09ceb0cc8cf4028f82 //token 代币地址，0地址为eth
+        00000000000000000000000000000000000000000000000000000000003567e0 //amount 代币输入数量
+        0000000000000000000000000000000000000000000000000000000029b92700 //rate 兑换比例
+        0000000000000000000000000000000000000000000000000000000092080880 //toAmount 代币输出数量
+        00000000000000000000000000000000000000000000000000000000000000c0
+        0000000000000000000000000000000000000000000000000000000000000004
+        6173646600000000000000000000000000000000000000000000000000000000 //iAddress icom地址
+
+        transactionHash:0xcef55a38f78636a0a2905a3c3326da8bfdfd5c55d73a8fa7d7568a7e9991ae80 blockNumber:31419041 iAddress:asdf toAmount:2450000000
+        transactionHash:0x9521ea085ac84cb76ac54c02b0b2f902d8bdb12e5da2c96f7053b75f9dd20f7f blockNumber:31419057 iAddress:asdf toAmount:71680000
+        transactionHash:0x00a4716d3405ec69583f9bf2a32a59c965761addb8f7d5069f38c38ae569b08c blockNumber:31419357 iAddress:asdf toAmount:2450000000
+        transactionHash:0x52edc90172e3ea4de193b3b43e40edad14fd9f956bf148793191cda3f22086fc blockNumber:31419373 iAddress:asdf toAmount:71680000
+
+        ////////////////////////////////////////////////////////命令说明//////////////////////////////////////////////////
+
+        pull-log         拉取兑换日志，参数minBlockNumber为空时默认从上一次拉取的最高区块开始，maxBlockNumber为空时拉取到最新高度
+        find-log         查询日志，参数minBlockNumber必填，maxBlockNumber必填
+        find-log-thash   按TransactionsHash查找，参数TransactionsHash必填
+        find-log-ihash   按ICom的TxHash查找，参数TxHash必填
+        find-log-iaddr   按ICom的Address查找，参数IAddress必填
+        last-block-num   获取已经拉取日志的最高区块高度，无参数
+        exit             退出程序
+        help             获取取命令说明

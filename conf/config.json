@@ -1,0 +1,16 @@
+{
+  "SrcIComAddress": "0x1234567890",
+  "ArbitrumApi": "https://api-sepolia.arbiscan.io/api",
+  "ArbitrumContractAddress": "0x9C607b08fE911CA20F3c661e518C13089C32Be30",
+  "ArbitrumContractTopic": "0x4a6af5cfd3969baa43d215151321689f373a20d038c968f77e16eba7c5161ac3",
+  "ArbitrumApiKey": "CCE52ECVS4PQK3D56ZD699Y24VJ58AZGBU",
+  "DefaultArbitrumFromBlock": 28091403,
+  "IComRpc": "http://127.0.0.1:2080/rpc",
+  "IComRpcUser": "test",
+  "IComRpcPassword": "testp",
+  "IComWalletPwd": "123456789",
+  "IComGas": 10000,
+  "IComAddrPre": "iCom",
+  "IcomRequestTxidMaxNum": 50,
+  "CheckTransactionPushIComTime": 30
+}
