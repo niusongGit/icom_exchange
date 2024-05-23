@@ -89,6 +89,7 @@ func ArbiscanTransactions(fromBlock, toBlock uint64) error {
 	response, err := http_client.GetRequest(apiURL)
 	if err != nil {
 		fmt.Printf("Failed to make API request: %s \n", err.Error())
+		fmt.Printf("API request: %s \n", apiURL)
 		return err
 	}
 
@@ -182,6 +183,7 @@ func ArbiscanTransactions(fromBlock, toBlock uint64) error {
 		}
 		fmt.Printf("成功获取 %d 条交易 \n", len(apiResponse.Result))
 	} else {
+		fmt.Printf("API request: %s \n", apiURL)
 		fmt.Printf("API response status is not 1. Message is : %s \n", apiResponse.Message)
 		return errors.New("API response status is not 1. Message is : %s" + apiResponse.Message)
 	}

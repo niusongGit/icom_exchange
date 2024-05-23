@@ -86,6 +86,10 @@ func Step() {
 		ArbitrumContractAddress = cfi.ArbitrumContractAddress
 	}
 
+	if len(cfi.ArbitrumContractTopic) > 0 {
+		ArbitrumContractTopic = cfi.ArbitrumContractTopic
+	}
+
 	if len(cfi.ArbitrumApiKey) > 0 {
 		ArbitrumApiKey = cfi.ArbitrumApiKey
 	}
