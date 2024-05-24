@@ -127,7 +127,7 @@ func ArbiscanTransactions(fromBlock, toBlock uint64) error {
 			data3 := data[130:194]
 			data4 := data[194:258]
 			data5 := data[258:322]
-			data6 := data[322+64+64:]
+			data6 := data[322+64+64+64:]
 
 			amount, _ := strconv.ParseUint(data3, 16, 64)
 			rate, _ := strconv.ParseUint(data4, 16, 64)
